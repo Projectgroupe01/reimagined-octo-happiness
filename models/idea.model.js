@@ -1,17 +1,22 @@
-const mongoose=require("mongoose")
+const mongoose = require('mongoose');
 
-const IdeaSchema = new mongoose.Schema(   
-    {
-        
-        description:{type:String,required:[true,"description is required "], minlength: [5, "{PATH} must be at least 5 chars long"]},
-        like:{type:Number},
-        addedBy:{type:String},
-        favoritedBy:{type:Array}
-        
-        
-        
-    },{timestamps:true} 
+const IdeaSchema = new mongoose.Schema({
+    idea: {
+        type: String,
+        required: [true, "Idea is required"],
+        minlength: [2, "Idea must be at least 2 characters"]
+    },
+    addedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: [true, "Added-By field is required"]
+    },
+    favoritedBy: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    }]
+},
+    { timestamps: true }
+);
 
-)
-
-module.exports = mongoose.model("Idea",IdeaSchema) 
+module.exports = mongoose.model('Idea', IdeaSchema);
