@@ -7,7 +7,9 @@ const UserSchema = new mongoose.Schema(
     name: {type: String,required:[true,"first name is required"], minlength: [2, "{PATH} must be at least 2 chars long"]},
     alias:{type:String,required:[true,"last name is required "], minlength: [2, "{PATH} must be at least 2 chars long"]},
     email: { type: String, required: [true, "Email is required"], minlength: [3, "L'{PATH} doit comporter au moins 3 caractères"],unique:[true,"Email already exist"],validate:[isEmail,"please enter a valid email"]},
-    password:{type:String,required:[true,"password is required"], minlength: [8, "{PATH} must be at least 8 chars long"]}
+    password:{type:String,required:[true,"password is required"], minlength: [8, "{PATH} must be at least 8 chars long"]},
+    ideasAdded:{type:Number},
+    ideasFavorited:{type:Number}
     
   },{timestamps:true}
 )
