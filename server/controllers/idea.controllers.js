@@ -1,75 +1,61 @@
-const Idea =require("../models/idea.model")
+const Idea = require("../models/idea.model");
+const User = require("../models/user.model")
+const jwt = require("jsonwebtoken");
+const secret = process.env.FIRST_SECRET_KEY;
 
-//CRUD
 
-
-//READ ALL
-module.exports.findAllIdea=(req,res)=>
-{
-    Idea.find({})
-    .then(allIdeas=>
-        {
-            console.log(allIdeas)
-            res.json(allIdeas)
-        })
-    .catch(err=>
-        {
-            res.json({message:'wait a minute😒😒',error:err})
-        })
-
+module.exports.findAllIdeas = (req, res) => {
+    Idea.find()
+        .populate("addedBy favoritedBy")
+        .then(allIdeas => res.json({ idea: allIdeas }))
+        .catch(err => res.status(400).json({ message: "Something went worng finding all ideas", error: err }))
 }
-//CREATE
-module.exports.createNewIdea = (req,res) =>
-{
-    Idea.create(req.body)
-        .then(idea=>
-            {
-                console.log(idea)
-                res.status(200).json({idea})
-            })
-        .catch(err=>
-            {
-                res.status(400).json({message:'wait a minute😶😶',error:err})
-            })
+module.exports.findOneIdea = (req, res) => {
+    Idea.findById(req.params.id)
+        .populate("addedBy favoritedBy")
+        .then(oneIdea => res.json({ idea: oneIdea }))
+        .catch(err => res.status(400).json({ message: "Something went worng finding one idea", error: err }))
 }
-
-// //FIND ONE
-module.exports.findIdea = (req,res) =>
-{
-   Idea.findOne({_id:req.params.pid})
-        .then(theIdea=>
-            {
-                console.log(theIdea)
-                res.json({theIdea})
-            })
-        .catch(err=>
-            {
-                res.json({message:'wait a minute😶😶',error:err})
-            })
+module.exports.createIdea = async (req, res) => {
+    const { _id } = jwt.verify(req.cookies.userToken, secret)
+    const myIdea = new Idea(req.body)
+    myIdea.addedBy = _id
+    myIdea.favoritedBy.push(_id)
+    try {
+        let newIdea = await myIdea.save()
+        await newIdea.populate("addedBy favoritedBy")
+        await User.findByIdAndUpdate(newIdea.addedBy, { $push: { ideasAdded: newIdea._id, ideasFavorited: newIdea._id } })
+        res.json({ idea: newIdea })
+        // console.log("inside try")
+    } catch (err) {
+        console.log(`inside catch`, err)
+        res.status(400).json({ message: "Something went worng creating a idea", error: err }) //error isnt specific to either try line
+    }
 }
-
-// //UPDATE
-module.exports.updateNewIdea = (req,res) =>
-{
-    Idea.findOneAndUpdate(
-    {_id:req.params.pid},
-    req.body,
-    {new:true,runValidators:true})
-        .then(updatedIdea=>
-            {
-                console.log(updatedIdea)
-                res.json({updatedIdea})
-            })
-        .catch(err=>
-            {
-                res.json({message:'wait a minute😶😶',error:err})
-            })
+module.exports.deleteIdea = (req, res) => {
+    Idea.findByIdAndDelete(req.params.id)
+        .then(result => res.json({ result: result }))
+        .catch(err => res.status(400).json({ message: "Something went worng deleting a idea", error: err }))
 }
-//DELETE
-module.exports.deleteIdea= (req, res) => 
-{
-    BoIdeaok.deleteOne({ _id: req.params.pid })
-        .then((deletedId) => res.json({deletedId}))
-        .catch((err) => console.log(err));
+module.exports.favorite = async (req, res) => {
+    const { _id } = jwt.verify(req.cookies.userToken, secret)
+    try {
+        const updatedIdea = await Idea.findByIdAndUpdate(req.params.id, { $push: { favoritedBy: _id } }, { new: true })
+        await updatedIdea.populate("addedBy favoritedBy")
+        await User.findByIdAndUpdate(_id, { $push: { ideasFavorited: req.params.id } })
+        res.json({ idea: updatedIdea })
+    } catch (err) {
+        res.status(400).json({ message: "Something went worng favoriting a idea", error: err }) //error isnt specific to either try line
+    }
 }
-
+module.exports.unfavorite = async (req, res) => {
+    const { _id } = jwt.verify(req.cookies.userToken, secret)
+    try {
+        const updatedIdea = await Idea.findByIdAndUpdate(req.params.id, { $pull: { favoritedBy: _id } }, { new: true })
+        await updatedIdea.populate("addedBy favoritedBy")
+        await User.findByIdAndUpdate(_id, { $pull: { ideasFavorited: req.params.id } })
+        res.json({ idea: updatedIdea })
+    } catch (err) {
+        res.status(400).json({ message: "Something went worng favoriting a idea", error: err }) //error isnt specific to either try line
+    }
+}

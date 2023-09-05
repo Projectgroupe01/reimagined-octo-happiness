@@ -1,15 +1,10 @@
-const IdeaControllers=require("../controllers/idea.controllers")
+const IdeaController = require("../controllers/idea.controller")
 
-
-
-console.log(IdeaControllers)
-
-module.exports=(app)=>
-{
-    app.get("/api/ideas",IdeaControllers.findAllIdea)
-    app.post("/api/ideas",IdeaControllers.createNewIdea)
-    app.get("/api/ideas/:pid",IdeaControllers.findIdea)
-    
-    app.delete("/api/ideas/:pid",IdeaControllers.deleteIdea)
+module.exports = app => {
+    app.get('/api/ideas', IdeaController.findAllIdeas)
+    app.get('/api/ideas/:id', IdeaController.findOneIdea)
+    app.post('/api/ideas', IdeaController.createIdea)
+    app.post('/api/ideas/:id/favorite', IdeaController.favorite)
+    app.post('/api/ideas/:id/unfavorite', IdeaController.unfavorite)
+    app.delete('/api/ideas/:id', IdeaController.deleteIdea)
 }
-
