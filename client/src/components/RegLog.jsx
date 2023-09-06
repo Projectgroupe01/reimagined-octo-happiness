@@ -8,7 +8,7 @@ const RegisterForm = (props) => {
     const [errors, setErrors] = useState({})
     const [userInfoReg, setUserInfoReg] = useState({
         name: "",
-        displayName: "",
+        alias: "",
         email: "",
         password: "",
         confirmPassword: ""
@@ -46,7 +46,7 @@ const RegisterForm = (props) => {
                 console.log(`submit errer`, err)
                 setErrors({
                     name: err.response.data.errors.name,
-                    displayName: err.response.data.errors.displayName,
+                    alias: err.response.data.errors.alias,
                     email: err.response.data.errors.email,
                     password: err.response.data.errors.password,
                     confirmPassword: err.response.data.errors.confirmPassword
@@ -84,10 +84,10 @@ const RegisterForm = (props) => {
                         <label className='form-label'>Name</label>
                         <input type="text" className="form-control" name="name" value={userInfoReg.name} onChange={regChange} />
                     </div>
-                    {errors.displayName ? <p className="text-danger">{errors.displayName.message}</p> : null}
+                    {errors.alias ? <p className="text-danger">{errors.alias.message}</p> : null}
                     <div className="form-group">
-                        <label className='form-label'>Display Name</label>
-                        <input type="text" className="form-control" name="displayName" value={userInfoReg.displayName} onChange={regChange} />
+                        <label className='form-label'>Alias</label>
+                        <input type="text" className="form-control" name="alias" value={userInfoReg.alias} onChange={regChange} />
                     </div>
                     {errors.email ? <p className="text-danger">{errors.email.message}</p> : null}
                     <div className="form-group">
