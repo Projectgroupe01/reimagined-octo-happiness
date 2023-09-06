@@ -9,7 +9,7 @@ const UserSchema = new mongoose.Schema({
     },
     alias: {
         type: String,
-        required: [true, "Last name is required"]
+        required: [true, "Alias is required"]
     },
     email: {
         type: String,
