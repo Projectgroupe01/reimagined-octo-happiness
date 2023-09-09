@@ -9,6 +9,7 @@ import Nav from "./components/Nav";
 import Dashboard from "./components/Dashboard";
 import RegLog from "./components/RegLog";
 import UserProfile from "./components/UserProfile";
+import LikeStatus from "./components/LikeStatus";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -73,17 +74,8 @@ function App() {
             />
           }
         />
-        <Route
-          path="/users/:id"
-          element={
-            <UserProfile
-              count={count}
-              setCount={setCount}
-              user={user}
-              welcome={welcome}
-            />
-          }
-        />
+        <Route path="/users/:id" element={<UserProfile />} />
+        <Route path="/ideas/:id" element={<LikeStatus />} />
       </Routes>
     </div>
   );

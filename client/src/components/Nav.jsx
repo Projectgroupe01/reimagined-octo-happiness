@@ -35,14 +35,12 @@ const Nav = (props) => {
     if (loggedIn) {
       navigate("/dashboard");
     }
-  }, [loggedIn, navigate]);
+  }, []);
 
   return (
-    <nav style={{ marginTop: 20, marginLeft: 20 }}>
+    <nav style={{ marginTop: 20, marginLeft: 20, marginBottom: 40 }}>
       <div>
-        {loggedIn && (
-          <h4 style={{ display: "inline" }}>Hi, {user?.name}</h4>
-        )}
+        {loggedIn && <h4 style={{ display: "inline" }}>Hi, {user?.name}</h4>}
       </div>
       <div style={{ marginLeft: 10 }}>
         {loggedIn && (

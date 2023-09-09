@@ -159,9 +159,7 @@ const Dashboard = (props) => {
 
   return (
     <div>
-      <h1 style={{ marginTop: "75px", marginLeft: 20 }}>
-        Welcome to Bright Ideas
-      </h1>
+      <h1 style={{ marginTop: 80, marginLeft: 20 }}>Welcome to Bright Ideas</h1>
       <div className={"mainDivLight"}>
         <div className={"col-sm-8 mx-auto"}>
           {windowWidth > 575 ? (

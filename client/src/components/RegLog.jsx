@@ -40,7 +40,7 @@ const RegisterForm = (props) => {
       .then((res) => {
         // console.log(res);
         setCount(count + 1); //update nav username & logout button
-        navigate("/");
+        navigate("/dashboard");
         setLoggedIn(true);
         window.location.reload();
       })
@@ -80,6 +80,7 @@ const RegisterForm = (props) => {
 
   return (
     <div className="row col-sm-6 mx-auto mt-5">
+      <h1 className="text-center">Bright IDEAS !</h1> 
       <br />
       <div className="col">
         <form className="regLog" onSubmit={regSubmit}>
